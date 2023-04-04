@@ -1,0 +1,182 @@
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+
+local Window = Rayfield:CreateWindow({
+    Name = "DEV HUB | @DËV#9128",
+    LoadingTitle = "DEV HUB",
+    LoadingSubtitle = "by DEV",
+    ConfigurationSaving = {
+       Enabled = true,
+       FolderName = nil, -- Create a custom folder for your hub/game
+       FileName = "DEV HUB"
+    },
+    Discord = {
+       Enabled = true,
+       Invite = "Ws4q3RXDCQ", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD.
+       RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+    },
+    KeySystem = true, -- Set this to true to use our key system
+    KeySettings = {
+       Title = "DEV HUB",
+       Subtitle = "Key System",
+       Note = "Join the discord (discord.gg/Ws4q3RXDCQ)",
+       FileName = "HubKey",
+       SaveKey = true,
+       GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+       Key = "DEVCHEATS"
+    }
+ })
+
+ Rayfield:Notify({
+    Title = "Discord",
+    Content = "https://discord.gg/Ws4q3RXDCQ",
+    Duration = 6.5,
+    Image = 4483362458,
+    Actions = { -- Notification Buttons
+       Ignore = {
+          Name = "Okay!",
+          Callback = function()
+          print("The user tapped Okay!")
+       end
+    },
+ },
+ })
+
+ local Tab = Window:CreateTab("Main", 4483362458) -- Title, Image
+ local Section = Tab:CreateSection("Main scripts")
+
+ local Button = Tab:CreateButton({
+    Name = "Jailbreak aimbot",
+    Callback = function()
+--/ max distance is 600 studs
+getgenv().toggled = true --/ true & false
+
+getgenv().old = getgenv().old or require(game:GetService("ReplicatedStorage").Module.RayCast).RayIgnoreNonCollideWithIgnoreList
+
+if getgenv().toggled then
+ require(game:GetService("ReplicatedStorage").Module.RayCast).RayIgnoreNonCollideWithIgnoreList = function(...)
+  local nearestDistance, nearestEnemy = 600, nil
+     for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+      if v.Team ~= game:GetService("Players").LocalPlayer.Team and v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
+          if (v.Character.HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude < nearestDistance then
+           nearestDistance, nearestEnemy = (v.Character.HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude, v
+          end
+      end
+     end
+     local arg = {old(...)}
+     if (tostring(getfenv(2).script) == "BulletEmitter" or tostring(getfenv(2).script) == "Taser") and nearestEnemy then
+      arg[1] = nearestEnemy.Character.HumanoidRootPart
+      arg[2] = nearestEnemy.Character.HumanoidRootPart.Position
+  end
+     return unpack(arg)
+ end
+else
+ require(game:GetService("ReplicatedStorage").Module.RayCast).RayIgnoreNonCollideWithIgnoreList = getgenv().old
+end
+    end,
+ })
+
+ local Button = Tab:CreateButton({
+    Name = "Jailbreak jetpack mods",
+    Callback = function()
+        for _, v in next, getgc(true) do
+            if (type(v) == 'table' and rawget(v, 'LocalMaxFuel')) then
+              v.LocalMaxFuel = math.huge
+              v.LocalFuel = math.huge
+              v.LocalFuelType = 'Rocket'
+            end
+          end
+    end,
+ })
+
+ local Button = Tab:CreateButton({
+    Name = "Main Jailbreak script",
+    Callback = function()
+        loadstring(game:HttpGet('https://gitlab.com/wspcontr/onemorehub/-/raw/main/scriptloader.lua'))()
+    end,
+ })
+
+
+ local Button = Tab:CreateButton({
+    Name = "greenville script good car mods",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/typical-overk1ll/scripts/main/Greenville", true))()
+    end,
+ })
+
+ local Button = Tab:CreateButton({
+    Name = "Greenville ECU",
+    Callback = function()
+        loadstring(game:HttpGet(('https://raw.githubusercontent.com/Lugtastic/hubs/main/EcuX-V2.lua'),true))()
+    end,
+ })
+
+
+ local Button = Tab:CreateButton({
+    Name = "Jailbreak auto farm use alt",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/alohabeach/Main/master/Scripts/JailbreakAutoRob.lua"))()
+    end,
+ })
+
+
+
+
+
+local Slider = Tab:CreateSlider({
+   Name = "Walkspeed",
+   Range = {0, 500},
+   Increment = 10,
+   Suffix = "Walkspeed",
+   CurrentValue = 16,
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+
+   end,
+})
+
+
+local Slider = Tab:CreateSlider({
+    Name = "Jumppower",
+    Range = {0, 500},
+    Increment = 10,
+    Suffix = "Jumppower",
+    CurrentValue = 50,
+    Flag = "Slider2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
+ 
+    end,
+ })
+
+
+ local Tab = Window:CreateTab("miscellaneous", 4483362458) -- Title, Image
+ local Section = Tab:CreateSection("extra things")
+ 
+ 
+ local ColorPicker = Tab:CreateColorPicker({
+    Name = "Color Picker",
+    Color = Color3.fromRGB(255,000,000),
+    Flag = "ColorPicker1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+        -- The function that takes place every time the color picker is moved/changed
+        -- The variable (Value) is a Color3fromRGB value based on which color is selected
+    end
+})
+
+
+local Keybind = Tab:CreateKeybind({
+    Name = "no use currently",
+    CurrentKeybind = "=",
+    HoldToInteract = false,
+    Flag = "Keybind1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Keybind)
+        Rayfield:Destroy()
+    -- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
+    end,
+ })
+
+
+ 
+
+Rayfield:LoadConfiguration()
