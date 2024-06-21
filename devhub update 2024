@@ -1,0 +1,326 @@
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/SiriusSoftwareLtd/Rayfield/main/source.lua'))()
+
+-- Create main window
+local Window = Rayfield:CreateWindow({
+    Name = "DEV HUB | @3dys",
+    LoadingTitle = "DEV HUB",
+    LoadingSubtitle = "by DEV",
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = nil,
+        FileName = "DEV HUB"
+    },
+    Discord = {
+        Enabled = true,
+        Invite = "Ws4q3RXDCQ",
+        RememberJoins = true
+    },
+    KeySystem = true,
+    KeySettings = {
+        Title = "DEV HUB",
+        Subtitle = "Key System",
+        Note = "Join the discord (discord.gg/Ws4q3RXDCQ)",
+        FileName = "HubKey",
+        SaveKey = true,
+        GrabKeyFromSite = false,
+        Key = "DEVCHEATS"
+    }
+})
+
+-- Notify user about Discord
+Rayfield:Notify({
+    Title = "Discord",
+    Content = "https://discord.gg/Ws4q3RXDCQ",
+    Duration = 6.5,
+    Image = 4483362458,
+    Actions = {
+        Ignore = {
+            Name = "Okay!",
+            Callback = function()
+                print("The user tapped Okay!")
+            end
+        }
+    },
+})
+
+-- Create Main tab
+local MainTab = Window:CreateTab("Main", 4483362458)
+local MainSection = MainTab:CreateSection("Main scripts")
+
+-- Jailbreak aimbot button
+MainTab:CreateButton({
+    Name = "Jailbreak aimbot",
+    Callback = function()
+        getgenv().toggled = true -- Toggle the aimbot on/off
+        getgenv().old = getgenv().old or require(game:GetService("ReplicatedStorage").Module.RayCast).RayIgnoreNonCollideWithIgnoreList
+
+        if getgenv().toggled then
+            require(game:GetService("ReplicatedStorage").Module.RayCast).RayIgnoreNonCollideWithIgnoreList = function(...)
+                local nearestDistance, nearestEnemy = 600, nil
+                for _, player in pairs(game:GetService("Players"):GetPlayers()) do
+                    if player.Team ~= game:GetService("Players").LocalPlayer.Team and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                        local distance = (player.Character.HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+                        if distance < nearestDistance then
+                            nearestDistance, nearestEnemy = distance, player
+                        end
+                    end
+                end
+                local args = {getgenv().old(...)}
+                if (tostring(getfenv(2).script) == "BulletEmitter" or tostring(getfenv(2).script) == "Taser") and nearestEnemy then
+                    args[1] = nearestEnemy.Character.HumanoidRootPart
+                    args[2] = nearestEnemy.Character.HumanoidRootPart.Position
+                end
+                return unpack(args)
+            end
+        else
+            require(game:GetService("ReplicatedStorage").Module.RayCast).RayIgnoreNonCollideWithIgnoreList = getgenv().old
+        end
+    end,
+})
+
+-- Jailbreak jetpack mods button
+MainTab:CreateButton({
+    Name = "Jailbreak jetpack mods",
+    Callback = function()
+        for _, v in next, getgc(true) do
+            if type(v) == 'table' and rawget(v, 'LocalMaxFuel') then
+                v.LocalMaxFuel = math.huge
+                v.LocalFuel = math.huge
+                v.LocalFuelType = 'Rocket'
+            end
+        end
+    end,
+})
+
+-- Main Jailbreak script button
+MainTab:CreateButton({
+    Name = "Main Jailbreak script",
+    Callback = function()
+        loadstring(game:HttpGet('https://gitlab.com/wspcontr/onemorehub/-/raw/main/scriptloader.lua'))()
+    end,
+})
+
+-- Greenville script good car mods button
+MainTab:CreateButton({
+    Name = "greenville script good car mods",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/typical-overk1ll/scripts/main/Greenville", true))()
+    end,
+})
+
+-- Greenville ECU button
+MainTab:CreateButton({
+    Name = "Greenville ECU",
+    Callback = function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/Lugtastic/hubs/main/EcuX-V2.lua', true))()
+    end,
+})
+
+-- Jailbreak auto farm use alt button
+MainTab:CreateButton({
+    Name = "Jailbreak auto farm use alt",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/alohabeach/Main/master/Scripts/JailbreakAutoRob.lua"))()
+    end,
+})
+
+-- Walkspeed slider
+MainTab:CreateSlider({
+    Name = "Walkspeed",
+    Range = {0, 500},
+    Increment = 10,
+    Suffix = "Walkspeed",
+    CurrentValue = 16,
+    Flag = "Slider1",
+    Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+    end,
+})
+
+-- Jumppower slider
+MainTab:CreateSlider({
+    Name = "Jumppower",
+    Range = {0, 500},
+    Increment = 10,
+    Suffix = "Jumppower",
+    CurrentValue = 50,
+    Flag = "Slider2",
+    Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
+    end,
+})
+
+-- Create Miscellaneous tab
+local MiscTab = Window:CreateTab("Miscellaneous", 4483362458)
+local MiscSection = MiscTab:CreateSection("Extra things")
+
+-- Color Picker
+MiscTab:CreateColorPicker({
+    Name = "Color Picker",
+    Color = Color3.fromRGB(255, 0, 0),
+    Flag = "ColorPicker1",
+    Callback = function(Value)
+        -- Function triggered when color picker is changed
+    end
+})
+
+-- Keybind
+MiscTab:CreateKeybind({
+    Name = "No use currently",
+    CurrentKeybind = "=",
+    HoldToInteract = false,
+    Flag = "Keybind1",
+    Callback = function(Keybind)
+        Rayfield:Destroy()
+    end,
+})
+
+-- Load configuration
+Rayfield:LoadConfiguration()
+
+
+local MiscTab = Window:CreateTab("New scripts", 4483362458)
+local MiscSection = MiscTab:CreateSection("scripts found durring 2024")
+
+
+MiscTab:CreateButton({
+   Name = "Silent Aim",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/Averiias/Universal-SilentAim/main/main.lua"))()
+   end,
+})
+
+
+MiscTab:CreateButton({
+   Name = "Track and feild inf money and gamepasses",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/Atom-mp4/Scripts/main/Track%20And%20Field/Main.lua"))()
+   end,
+})
+
+
+MiscTab:CreateButton({
+   Name = "80 or more scripts QP",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/QP-Community/Roblox-Exploit/main/Loader.lua"))()
+   end,
+})
+
+
+MiscTab:CreateButton({
+   Name = "System broken (best script for mic up and other foolery)",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/H20CalibreYT/SystemBroken/main/script"))()
+   end,
+})
+
+
+MiscTab:CreateButton({
+   Name = "midnight chasers auto farm",
+   Callback = function()
+      --[[
+	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
+]]
+warn("Anti afk running")
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+warn("Anti afk ran")
+game:GetService("VirtualUser"):CaptureController()
+game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+end)
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Marco8642/science/main/ui%20libs2", true))()
+local example = library:CreateWindow({
+  text = "Midnight"
+})
+example:AddBox("Enter Vehicle Speed", function(object, focus)
+    if focus then
+        getfenv().speed = tonumber(object.Text)
+    end
+end)
+example:AddToggle("Auto Farm", function(state)
+getfenv().auto = true
+getfenv().first = false
+spawn(function()
+    while getfenv().auto do
+    for i,v in pairs(workspace:GetChildren()) do
+        if v.ClassName == "Model" and v:FindFirstChild("Container") or v.Name == "PortCraneOversized" then
+            v:Destroy()
+        end
+    end
+    wait(1)
+end
+end)
+while getfenv().auto do
+local hum = game.Players.LocalPlayer.Character.Humanoid
+local car = hum.SeatPart.Parent
+ car.PrimaryPart=car.Body:FindFirstChild("#Weight")
+if getfenv().first ~= true then
+    if workspace.Workspace:FindFirstChild("Buildings") then
+    workspace.Workspace.Buildings:Destroy()
+    end
+car:PivotTo(CFrame.new(Vector3.new(-7594.541015625, -3.513848304748535, 5130.95263671875),Vector3.new(-6205.29833984375, -3.5030133724212646, 8219.853515625)))
+wait(5)
+
+end
+car.PrimaryPart.Velocity = Vector3.new(0,0,0)
+getfenv().first = true
+ local location = Vector3.new(-6205.29833984375, -3.5030133724212646, 8219.853515625)
+ repeat task.wait()
+    mathlock = getfenv().speed or 500
+    car.PrimaryPart.Velocity =car.PrimaryPart.CFrame.LookVector*mathlock
+    car:PivotTo(CFrame.new(car.PrimaryPart.Position,location))
+until game.Players.LocalPlayer:DistanceFromCharacter(location)< 50 or getfenv().auto == false
+car.PrimaryPart.Velocity = Vector3.new(0,0,0)
+local location = Vector3.new(-7594.541015625, -3.513848304748535, 5130.95263671875)
+repeat task.wait()
+    mathlock = getfenv().speed or 500
+    car.PrimaryPart.Velocity =car.PrimaryPart.CFrame.LookVector*mathlock
+    car:PivotTo(CFrame.new(car.PrimaryPart.Position,location))
+until game.Players.LocalPlayer:DistanceFromCharacter(location)< 50 or getfenv().auto == false
+car.PrimaryPart.Velocity = Vector3.new(0,0,0)
+end
+end)
+   end,
+})
+
+
+MiscTab:CreateButton({
+   Name = "Sneaker resell simulator script",
+   Callback = function()
+      --[[
+        Package Name: srsAutoPerfectSell
+        Last Updated: 06/04/2024
+        Game Link: https://www.roblox.com/games/12991635726/Sneaker-Resell-Simulator
+--]]
+
+_G.Distance = 12
+local Player = game.Players.LocalPlayer
+local MyGui = Player.PlayerGui
+
+local MainScreenGui = MyGui:WaitForChild("MainScreenGui")
+local PerfectFrame = MainScreenGui.SellAnimFrame.BarAndLine.ExtraBarFrame.LineColorsFrame["COLORX_Perfect"]
+local Line = MainScreenGui.SellAnimFrame.BarAndLine.Line
+local Sell = MainScreenGui.SellAnimFrame.StopButton
+
+local function isLineNearPerfectFrame(line, perfect)
+    local centerXLine = line.AbsolutePosition.X + line.AbsoluteSize.X/2
+    local centerXPerfectFrame = perfect.AbsolutePosition.X + perfect.AbsoluteSize.X/2
+
+    local distanceThreshold = _G.Distance
+    return math.abs(centerXLine - centerXPerfectFrame) <= distanceThreshold
+end
+
+Line:GetPropertyChangedSignal("AbsolutePosition"):Connect(function()
+    if isLineNearPerfectFrame(Line, PerfectFrame) then
+        firesignal(Sell.MouseButton1Down)
+    end
+end)
+   end,
+})
+
+
+MiscTab:CreateButton({
+   Name = "more scripts planned to be added in the future",
+   Callback = function()
+      
+   end,
+})
